@@ -29,7 +29,7 @@ describe("ProposalVote Test", function () {
         const quorum1 = 1;
         await proposalVote.connect(owner).createProposal(name1, description1, quorum1);
     
-        expect(await proposalVote.getProposal(0)).to.be.deep.equal([name1, description1, 0,[], quorum1, 1]);
+        expect(await proposalVote.getAProposal(0)).to.be.deep.equal([name1, description1, 0,[], quorum1, 1]);
     
         
     });
@@ -37,13 +37,13 @@ describe("ProposalVote Test", function () {
     it("Should be able to vote on a proposal", async function () {
         const { proposalVote, owner, otherAccount } = await loadFixture(deployProposalVoteFixture);
         
-        const name1 = "The team!";
-        const description1 = "This is from team";
+        const name1 = "Hello Web3 Peeps!";
+        const description1 = "From DLT Africa Team";
         const quorum1 = 1;
         
         await proposalVote.connect(owner).createProposal(name1, description1, quorum1);
         await proposalVote.connect(otherAccount).voteOnProposal(0);
-        const proposal = await proposalVote.getProposal(0);
+        const proposal = await proposalVote.getAProposal(0);
         
         expect(proposal[2]).to.equal(1);
         expect(proposal[3]).to.include(otherAccount.address);  
@@ -52,14 +52,14 @@ describe("ProposalVote Test", function () {
 
     it("Should revert when voting on non-existent proposal", async function() {
         const { proposalVote, owner } = await loadFixture(deployProposalVoteFixture);
-        await expect(proposalVote.connect(owner).voteOnProposal(0)).to.be.revertedWith("Index is out of bound");
+        await expect(proposalVote.connect(owner).voteOnProposal(0)).to.be.revertedWith("index is out-of-bound");
     });
 
 
      
     it("Should not be allowed to vote twice", async function () {
         const { proposalVote, owner, otherAccount } = await loadFixture(deployProposalVoteFixture);
-        const name1 = "Hello Web3 Peeps!";
+        const name1 = "DLT team!";
         const description1 = "From DLT Africa Team";
         const quorum1 = 2;
 
@@ -73,8 +73,8 @@ describe("ProposalVote Test", function () {
     it("Should change status to Accepted when quorum is reached", async function () {
         const { proposalVote, owner, otherAccount } = await loadFixture(deployProposalVoteFixture);
     
-        const name1 = "Hello Web3 Peeps!";
-        const description1 = "From DLT Africa Team";
+        const name1 = "My team!";
+        const description1 = "The team is here";
         const quorum1 = 2;
     
         await proposalVote.connect(owner).createProposal(name1, description1, quorum1);
@@ -82,7 +82,7 @@ describe("ProposalVote Test", function () {
         await proposalVote.connect(owner).voteOnProposal(0);
         await proposalVote.connect(otherAccount).voteOnProposal(0); 
     
-        const proposal = await proposalVote.getProposal(0);
+        const proposal = await proposalVote.getAProposal(0);
     
         expect(proposal[5]).to.equal(3); 
     
@@ -101,7 +101,7 @@ describe("ProposalVote Test", function () {
         await proposalVote.connect(owner).createProposal(name1, description1, quorum1);
         await proposalVote.connect(owner).voteOnProposal(0);
     
-        const proposal = await proposalVote.getProposal(0);
+        const proposal = await proposalVote.getAProposal(0);
         expect(proposal[5]).to.equal(2); 
     });
 
@@ -118,7 +118,7 @@ describe("ProposalVote Test", function () {
         await proposalVote.connect(owner).voteOnProposal(0);
         await proposalVote.connect(otherAccount).voteOnProposal(0);
     
-        const proposal = await proposalVote.getProposal(0);
+        const proposal = await proposalVote.getAProposal(0);
     
         expect(proposal[3]).to.include(owner.address);
         expect(proposal[3]).to.include(otherAccount.address);

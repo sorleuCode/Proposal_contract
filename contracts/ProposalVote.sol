@@ -65,7 +65,7 @@ contract ProposalVote{
 
     }
 
-    function getAllproposals() external view returns (Proposal[] memory) {
+    function getAllProposals() external view returns (Proposal[] memory) {
 
         return proposals;
     }
